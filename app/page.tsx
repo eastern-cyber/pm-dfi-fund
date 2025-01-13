@@ -2,9 +2,8 @@
 
 // import { ThirdwebProvider } from "@thirdweb-dev/react";
 // import { ChainId } from "@thirdweb-dev/sdk";
-import { AccountProvider, AccountAvatar, AccountBalance, AccountAddress } from "thirdweb/react";
+import { AccountProvider, AccountAvatar, AccountBalance, AccountAddress, AccountBalanceInfo, ChainProvider, ChainIcon, TokenProvider, TokenIcon  } from "thirdweb/react";
 import { base } from "thirdweb/chains";
-import { ChainProvider, ChainIcon } from "thirdweb/react";
 
 import Image from "next/image";
 import {
@@ -33,7 +32,8 @@ const DFAST_POLYGON =
 
 export default function Home() {
 
-  const account = useActiveAccount ();
+  const activeAccount = useActiveAccount();
+  console.log("address", activeAccount?.address);
 
   const { data: contractMetadata } = useReadContract(
     getContractMetadata,
@@ -54,11 +54,23 @@ export default function Home() {
     );
   }
 
+  function Token() {
+    return (
+      <TokenProvider
+        address={"0xca23b56486035e14F344d6eb591DC27274AF3F47"}
+        client={client}
+        chain={polygon}
+      >
+        <TokenIcon className="h-6 w-6 rounded-full mr-1" />
+      </TokenProvider>
+    );
+  }
+
   function Account() {
     return (
       <div className="flex flex-col justify-items-center mt-4">
         <AccountProvider
-          address="0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"
+          address={"0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"}
           client={client}
         >
           <div className="justify-items-center">
@@ -70,17 +82,18 @@ export default function Home() {
               fallbackComponent={<img className="w-20 h-20 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbgJDFLehkQpFnas_gqV8aGpJTzR26MIlsatrb458vJWIFM9KZpv0HXnSRsbHJ6VjLx4I&usqp=CAU"/>}
             />
           </div>
-          <div className="flex items-center" mt-1>
-            <Chain /> <AccountAddress
-              className="flex justify-items-center mt-2"
-            />
+          <div className="flex justify-items-center mt-2">
+            <Chain /> <AccountAddress />
           </div>
-          <div className="justify-items-center">
-            <AccountBalance 
-              className="flex justify-items-center mt-4"
+          <div className="flex justify-items-center mt-4">
+            <Token />
+            <AccountBalance
               chain={polygon}
               tokenAddress={DFAST_POLYGON}
               loadingComponent={<span>Loading...</span>}
+              formatFn={(props: AccountBalanceInfo) =>
+                `${props.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${props.symbol}`
+              }
             />
           </div>
         </AccountProvider>
@@ -88,7 +101,7 @@ export default function Home() {
     );
   }
 
-if(!account)
+if(!activeAccount)
   {
     return (
       <main className="p-4 pb-10 min-h-[100vh] flex justify-items-center container max-w-screen-lg mx-auto">
