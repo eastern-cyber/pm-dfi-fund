@@ -2,8 +2,8 @@
 
 // import { ThirdwebProvider } from "@thirdweb-dev/react";
 // import { ChainId } from "@thirdweb-dev/sdk";
-import { AccountProvider, AccountAvatar, AccountBalance, AccountAddress, AccountBalanceInfo, ChainProvider, ChainIcon, TokenProvider, TokenIcon  } from "thirdweb/react";
-import { base } from "thirdweb/chains";
+import { AccountProvider, AccountName, AccountAvatar, AccountBalance, AccountAddress, AccountBalanceInfo, ChainProvider, ChainIcon, TokenProvider, TokenIcon  } from "thirdweb/react";
+import { base, polygonAmoy } from "thirdweb/chains";
 
 import Image from "next/image";
 import {
@@ -17,6 +17,7 @@ import { inAppWallet } from "thirdweb/wallets";
 
 // create the client with your clientId, or secretKey if in a server environment
 const client = createThirdwebClient({
+  // clientId: "e8b864cf8d55fbd854f43ae53b6c824c",
   clientId: "e8b864cf8d55fbd854f43ae53b6c824c",
 });
 
@@ -47,7 +48,7 @@ export default function Home() {
       <ChainProvider chain={polygon}>
         <ChainIcon
           client={client}
-          className="h-auto w-6 rounded-full mr-1"
+          className="h-auto w-6 rounded-full p-1"
           loadingComponent={<span>Loading...</span>}
         />
       </ChainProvider>
@@ -70,20 +71,27 @@ export default function Home() {
     return (
       <div className="flex flex-col justify-items-center mt-4">
         <AccountProvider
-          address={"0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"}
+          address={"0x5351D5D4AF2aFb480A0F260c482aAAaAD9B88Bd9"}
           client={client}
         >
           <div className="justify-items-center">
             <AccountAvatar
               className="flex flex-col justify-items-center w-20 h-20 rounded-full"
               loadingComponent={<span>Loading...</span>}
-              resolverAddress={"0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"} resolverChain={base}
+              resolverAddress={"0x5351D5D4AF2aFb480A0F260c482aAAaAD9B88Bd9"} resolverChain={base}
               socialType={"lens"} // Choose between: "farcaster" | "lens" | "ens"
               fallbackComponent={<img className="w-20 h-20 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbgJDFLehkQpFnas_gqV8aGpJTzR26MIlsatrb458vJWIFM9KZpv0HXnSRsbHJ6VjLx4I&usqp=CAU"/>}
             />
           </div>
+          <div className="justify-items-center">
+            {/* You can choose between "ens", "lens" and "farcaster" */}
+            <AccountName
+              socialType="lens"
+              loadingComponent={<span>Loading...</span>}
+            />
+          </div>
           <div className="flex justify-items-center mt-2">
-            <Chain /> <AccountAddress />
+            บัญชีผู้ใช้งาน : <Chain /> <AccountAddress />
           </div>
           <div className="flex justify-items-center mt-4">
             <Token />
@@ -126,8 +134,8 @@ if(!activeAccount)
   }
 
   return (
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <main className="flex flex-col gap-8 row-start-2 items-center justify-items-center sm:items-start">
+      <div className="grid grid-rows-[20px_1fr_20px] justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <main className="flex flex-col gap-8 row-start-2 justify-items-center sm:items-start">
           <div className="justify-items-center p-4">
             <div className="justify-items-center p-4">
               <ConnectButton locale={"en_US"}
@@ -140,6 +148,7 @@ if(!activeAccount)
             </div>
           </div>
         </main>
+
         <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
           <a
             className="flex items-center gap-2 hover:underline hover:underline-offset-4"
