@@ -2,8 +2,9 @@
 
 // import { ThirdwebProvider } from "@thirdweb-dev/react";
 // import { ChainId } from "@thirdweb-dev/sdk";
-import { AccountProvider, AccountAvatar, AccountBalance } from "thirdweb/react";
+import { AccountProvider, AccountAvatar, AccountBalance, AccountAddress } from "thirdweb/react";
 import { base } from "thirdweb/chains";
+import { ChainProvider, ChainIcon } from "thirdweb/react";
 
 import Image from "next/image";
 import {
@@ -41,34 +42,58 @@ export default function Home() {
     }
   );
 
+  function Chain() {
+    return (
+      <ChainProvider chain={polygon}>
+        <ChainIcon
+          client={client}
+          className="h-auto w-6 rounded-full mr-1"
+          loadingComponent={<span>Loading...</span>}
+        />
+      </ChainProvider>
+    );
+  }
+
   function Account() {
-  return (
-    <AccountProvider
-      address="0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"
-      client={client}
-    >
-      <AccountAvatar
-        className="w-20 h-20 rounded-full"
-        loadingComponent={<span>Loading...</span>}
-        resolverAddress={"0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"} resolverChain={base} 
-        socialType={"lens"} // Choose between: "farcaster" | "lens" | "ens"
-        fallbackComponent={<img className="w-20 h-20 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbgJDFLehkQpFnas_gqV8aGpJTzR26MIlsatrb458vJWIFM9KZpv0HXnSRsbHJ6VjLx4I&usqp=CAU"/>}
-      />
-      <AccountBalance className="flex justify-center mt-4"
-                        chain={polygon}
-                        tokenAddress={DFAST_POLYGON}
-                        loadingComponent={<span>Loading...</span>}
-      />
-    </AccountProvider>
-  );
-}
+    return (
+      <div className="flex flex-col justify-items-center mt-4">
+        <AccountProvider
+          address="0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"
+          client={client}
+        >
+          <div className="justify-items-center">
+            <AccountAvatar
+              className="flex flex-col justify-items-center w-20 h-20 rounded-full"
+              loadingComponent={<span>Loading...</span>}
+              resolverAddress={"0x12E43878Ab2a41ACA0545a7dCa3536D92e16E8b7"} resolverChain={base}
+              socialType={"lens"} // Choose between: "farcaster" | "lens" | "ens"
+              fallbackComponent={<img className="w-20 h-20 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbgJDFLehkQpFnas_gqV8aGpJTzR26MIlsatrb458vJWIFM9KZpv0HXnSRsbHJ6VjLx4I&usqp=CAU"/>}
+            />
+          </div>
+          <div className="flex items-center" mt-1>
+            <Chain /> <AccountAddress
+              className="flex justify-items-center mt-2"
+            />
+          </div>
+          <div className="justify-items-center">
+            <AccountBalance 
+              className="flex justify-items-center mt-4"
+              chain={polygon}
+              tokenAddress={DFAST_POLYGON}
+              loadingComponent={<span>Loading...</span>}
+            />
+          </div>
+        </AccountProvider>
+      </div>
+    );
+  }
 
 if(!account)
   {
     return (
-      <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
-        <div className="py-20">
-          <div className="flex justify-center mb-20">
+      <main className="p-4 pb-10 min-h-[100vh] flex justify-items-center container max-w-screen-lg mx-auto">
+        <div className="py-20 justify-items-center">
+          <div className="flex justify-items-center mb-20">
           <ConnectButton locale={"en_US"}
               client={client}
               wallets={[ inAppWallet ({
@@ -89,8 +114,8 @@ if(!account)
 
   return (
       <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-          <div>
+        <main className="flex flex-col gap-8 row-start-2 items-center justify-items-center sm:items-start">
+          <div className="justify-items-center p-4">
             <div className="justify-items-center p-4">
               <ConnectButton locale={"en_US"}
                 client={client}
